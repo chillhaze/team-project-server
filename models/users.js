@@ -34,7 +34,6 @@ const userSchema = new Schema({
 
 userSchema.pre('save', () => {
   if (this.isNew) {
-    this.name = this.email.split('@')[0]
     this.avatarURL = gravatar.url(this.email, { protocol: 'http', s: '250', d: 'robohash' })
   }
 })

@@ -15,9 +15,9 @@ const transactionSchema = Schema({
     type: String,
     required: [true, 'Unset transaction description']
   },
-  cathegory: {
+  category: {
     type: SchemaTypes.ObjectId,
-    ref: 'cathegory'
+    ref: 'category'
   },
   amount: {
     type: Number,

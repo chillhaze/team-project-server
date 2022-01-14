@@ -1,5 +1,7 @@
-const FinanceControllers = require('./transactionsControllers')
+const getTransactionsPerDay = require('./getTransactionsController')
+const addTransaction = require('./addTransactionController')
 
 module.exports = {
-  FinanceControllers,
+  getTransactionsPerDay,
+  addTransaction
 }

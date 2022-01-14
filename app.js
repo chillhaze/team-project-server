@@ -6,6 +6,7 @@ require('dotenv').config()
 
 const authRouter = require('./routes/api/auth')
 const transactionsRouter = require('./routes/api/transactions')
+const categoriesRouter = require('./routes/api/categories')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use('/icons', express.static(iconsDir))
 app.use('/avatars', express.static(avatarsDir))
 app.use('/api/auth', authRouter)
 app.use('/api/transactions', transactionsRouter)
+app.use('/api/categories', categoriesRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

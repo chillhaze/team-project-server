@@ -17,7 +17,7 @@ class balanceController {
     const balance = await balanceService.create(_id, req.body)
     return res.status(200).json({
       status: 'success',
-      code: 200,
+      code: 201,
       result: balance.totalCost,
     })
   }

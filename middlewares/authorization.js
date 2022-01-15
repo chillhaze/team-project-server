@@ -8,8 +8,8 @@ require("dotenv").config({ path: envPath });
 const { SECRET_KEY } = process.env;
 
 async function authorization(req, res, next) {
-    const { auth = ""} = req.header;
-    const [bearer, token] = auth.split(" ");
+    const { authorization = ""} = req.headers;
+    const [bearer, token] = authorization.split(" ");
     try {
         if (bearer !== "Bearer") {
             throw new Unauthorized("Not authorized");

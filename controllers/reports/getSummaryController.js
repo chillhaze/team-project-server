@@ -1,11 +1,13 @@
-const { Transaction } = require('../../models')
-const { getDaysInterval } = require('../../utils')
+const createError = require('http-errors')
 
-const getTransactionsPerDay = async (req, res) => {
+const { Transaction } = require('../../models')
+const { getYearsInterval, makeSummary } = require('../../utils')
+
+const getSummary = async (req, res) => {
   // const { _id: owner } = req.user
   const { type, period } = req.query
 
-  const [minPeriod, maxPeriod] = getDaysInterval(period)
+  const [minPeriod, maxPeriod] = getYearsInterval(period)
 
   // const result = await Transaction
   //   .find({
@@ -18,7 +20,7 @@ const getTransactionsPerDay = async (req, res) => {
   //   })
   //   .select({ owner: 0, completedAt: 0, type: 0, createdAt: 0, updatedAt: 0 })
 
-  const result = await Transaction // удалиться как заработает логинизация пользователя
+  const transactions = await Transaction // удалиться как заработает логинизация пользователя
     .find({
       type,
       completedAt: {
@@ -28,14 +30,15 @@ const getTransactionsPerDay = async (req, res) => {
     })
     .select({ owner: 0, type: 0, createdAt: 0, updatedAt: 0 })
 
+  if (transactions.length === 0) throw createError(404, 'Not found')
+
   res.status(200).json({
     status: 'success',
     code: 200,
     data: {
-      total: result.length,
-      result
+      result: makeSummary(transactions)
     }
   })
 }
 
-module.exports = getTransactionsPerDay
+module.exports = getSummary

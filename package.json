@@ -21,6 +21,7 @@
     "dev": "nodemon index"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -30,7 +31,8 @@
     "http-errors": "^2.0.0",
     "joi": "^17.5.0",
     "mongoose": "^6.1.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nanoid": "^3.1.32"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

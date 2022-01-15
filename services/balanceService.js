@@ -31,6 +31,7 @@ class balanceService {
     const balance = this.get(userId)
     balance.totalCost -= value
     this.update(balance)
+    return balance
   }
   // одновити баланс
   async update(newBalance) {

@@ -1,4 +1,9 @@
 const createUrl = require('./createUrl')
-const getTimeInterval = require('./getTimeInterval')
+const getDateIntervals = require('./getTimeInterval')
+const makeSummary = require('./makeSummary')
 
-module.exports = { createUrl, getTimeInterval }
+module.exports = {
+  createUrl,
+  ...getDateIntervals,
+  makeSummary
+}

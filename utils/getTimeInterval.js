@@ -12,7 +12,9 @@ const getYearsInterval = date => {
   const yearsInterval = [baseYear - 1, baseYear + 1]
 
   return yearsInterval.map((elem, i) => (
-    date = i === 0 ? new Date(`12.31.${elem}`).toISOString() : new Date(`01.01.${elem}`).toISOString()
+    i === 0
+      ? new Date(`12.31.${elem}`).toISOString()
+      : new Date(`01.01.${elem}`).toISOString()
   ))
 }
 

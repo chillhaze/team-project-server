@@ -1,9 +1,13 @@
 const createUrl = require('./createUrl')
-const getDateIntervals = require('./getTimeInterval')
 const makeSummary = require('./makeSummary')
+const getDaysInterval = require('./getDaysInterval')
+const getMonthOfYearInterval = require('./getMonthOfYearInterval')
+const getYearsInterval = require('./getYearsInterval')
 
 module.exports = {
   createUrl,
-  ...getDateIntervals,
-  makeSummary
+  makeSummary,
+  getDaysInterval,
+  getMonthOfYearInterval,
+  getYearsInterval
 }

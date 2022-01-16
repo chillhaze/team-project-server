@@ -1,0 +1,235 @@
+{
+  "openapi": "3.0.1",
+
+  "info": {
+    "version": "1.0.0",
+
+    "title": "API Docs",
+    "description": "Showing off kapu$ta api",
+
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+
+  "consumes": ["application/json"],
+
+  "produces": ["application/json"],
+
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Balance",
+      "description": "Balance endpoints"
+    }
+  ],
+
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+
+        "parameters": [],
+
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Bad request (invalid request body)",
+
+            "content": {}
+          },
+
+          "409": {
+            "description": "Provided email already exists",
+
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {},
+    "/auth/logout": {},
+    "/auth/verify": {},
+    "/api/balance": {
+      "get": {
+        "tags": ["Balance"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Balance"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "create balance",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+
+        "required": ["email", "password"],
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+
+      "RegistrationResponse": {
+        "type": "object",
+
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "user's name" },
+                  "email": { "type": "email", "description": "user's email" },
+                  "verifyToken": { "type": "string", "description": "token" },
+                  "avatarUrl": {
+                    "type": "string",
+                    "description": "user's avatar URL"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": {
+            "user": {
+              "name": "userName",
+              "email": "userName@mail.com",
+              "verifyToken": "inn2nsdukybcsudy.dcsiudcsdbcsd.sdcnscbasa",
+              "avatarUrl": "http://gravatar.com/1234"
+            }
+          }
+        }
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "result": {
+            "type": "number",
+            "description": "balance",
+            "example": "5000.00"
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "result": "5000.00"
+        }
+      },
+      "BalanceRequest": {
+        "type": "object",
+        "properties": {
+          "totalCost": {
+            "type": "number",
+            "description": "initialize balance",
+            "required": true,
+            "example": "5000.00"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

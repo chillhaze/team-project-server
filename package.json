@@ -32,7 +32,8 @@
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nanoid": "^3.1.32"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

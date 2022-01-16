@@ -1,5 +1,5 @@
-const getMonthOfYearInterval = date => {
-  const incomeDate = new Date(date)
+const getMonthOfYearInterval = (year, month) => {
+  const incomeDate = new Date(year, month)
   const baseYear = incomeDate.getFullYear()
   const baseMonth = incomeDate.getMonth()
 

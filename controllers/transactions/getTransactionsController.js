@@ -1,5 +1,5 @@
 const { Transaction } = require('../../models')
-const { getDaysInterval } = require('../../utils')
+const { getDaysInterval, dataNormalizer } = require('../../utils')
 
 const getTransactionsPerDay = async (req, res) => {
   // const { _id: owner } = req.user
@@ -33,7 +33,7 @@ const getTransactionsPerDay = async (req, res) => {
     code: 200,
     data: {
       total: result.length,
-      result
+      result: dataNormalizer(result, '_id')
     }
   })
 }

@@ -1,8 +1,9 @@
-const { Schema, model } = require('mongoose')
-const gravatar = require('gravatar')
+
+const { Schema, model } = require('mongoose');
+const gravatar = require('gravatar');
 const bcrypt = require("bcryptjs");
 const Joi = require('joi');
-const path = require("path");
+
 
 const userSchema = new Schema({
   password: {
@@ -34,17 +35,16 @@ const userSchema = new Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-/*userSchema.pre('save', () => {
-  if (this.isNew) {
-    this.avatarURL = gravatar.url(this.email, { protocol: 'http', s: '250', d: 'robohash' })
-  }
-})*/
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+}
 
-/*userSchema.post('save', () => {
-  if (!this.name) {
-    this.name = this.email.split('@')[0]
-  }
-})*/
+const userLoginJoiSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
+});
+
+
 
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -68,9 +68,14 @@ const userRegisterJoiSchema = Joi.object({
   name: Joi.string().min(6).max(20)
 });
 
+userSchema.post('save', () => {
+  this.name = this.email.split('@')[0]
+})
+
 const User = model('user', userSchema)
 
 module.exports = {
   User,
   userRegisterJoiSchema
 }
+

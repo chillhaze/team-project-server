@@ -1,5 +1,11 @@
-const { Finance } = require('./finance')
+const { Transaction } = require('./transactions')
+const { User } = require('./users')
+const { Balance } = require('./balances')
+const { Category } = require('./category')
 
 module.exports = {
-  Finance,
+  Balance,
+  User,
+  Transaction,
+  Category
 }

@@ -1,4 +1,6 @@
-const express = require('express')
+const express = require('express');
+const {controllerWrapper, authorization} = require("../../middlewares/");
+const {authControllers: control} = require("../../controllers/");
 
 const router = express.Router()
 
@@ -9,7 +11,7 @@ router.post('/register')
 router.post('/login')
 
 // Logout user
-router.post('/logout')
+router.post('/logout', authorization, controllerWrapper(control.AuthControllers.logout));
 
 // update verification
 router.get('/verify/:verificationToken')

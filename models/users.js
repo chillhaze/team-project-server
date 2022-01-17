@@ -32,7 +32,7 @@ const userSchema = new Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-userSchema.pre('save', () => {
+/*userSchema.pre('save', () => {
   if (this.isNew) {
     this.avatarURL = gravatar.url(this.email, { protocol: 'http', s: '250', d: 'robohash' })
   }
@@ -40,7 +40,7 @@ userSchema.pre('save', () => {
 
 userSchema.post('save', () => {
   this.name = this.email.split('@')[0]
-})
+})*/
 
 const User = model('user', userSchema)
 

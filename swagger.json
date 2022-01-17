@@ -224,11 +224,13 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "user's name"
+                    "description": "user's name",
+                    "example": "Pedro Gonzales"
                   },
                   "email": {
                     "type": "string",
-                    "description": "user's email"
+                    "description": "user's email",
+                    "example": "user@mail.com"
                   },
                   "token": {
                     "type": "string",

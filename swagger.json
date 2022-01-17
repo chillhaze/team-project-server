@@ -88,7 +88,39 @@
         }
       }
     },
-    "/auth/login": {},
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "login user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/logout": {},
     "/auth/verify": {},
     "/balance": {
@@ -142,16 +174,73 @@
         "required": ["email", "password"],
 
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Pedro Gonzales"
+          },
           "email": {
             "type": "string",
             "description": "User's email",
-            "format": "email"
+            "example": "user@mail.com"
           },
 
           "password": {
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+
+        "required": ["email", "password"],
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "user@mail.com"
+          },
+
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "user's name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "user's email"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "token"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "description": "user's avatar URL"
+                  }
+                }
+              }
+            }
           }
         }
       },

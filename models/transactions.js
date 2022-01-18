@@ -45,7 +45,7 @@ transactionSchema.pre('save', { document: true }, async function (next) {
   const { owner, type, amount } = this
 
   const balance = await model(MODELS.BALANCE)
-    .findOne({ owner: '61e71b5895d023fab1ba76e8' })
+    .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового пользователя
 
   if (!balance) {
     throw new Error('Balance not set')
@@ -70,7 +70,7 @@ transactionSchema.pre('findOneAndRemove', { document: false, query: true }, asyn
   const { owner, type, amount } = transaction
 
   const balance = await model(MODELS.BALANCE)
-    .findOne({ owner: '61e71b5895d023fab1ba76e8' })
+    .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового пользователя
 
   if (!balance) {
     throw new Error('Balance not set')

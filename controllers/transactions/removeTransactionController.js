@@ -17,7 +17,7 @@ const removeTransaction = async (req, res) => {
 
   if (!result) throw createError(404, 'Not found')
 
-  const { totalCost: balance } = await Balance
+  const { value: balance } = await Balance
     .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового owner-а
 
   res.status(200).json({

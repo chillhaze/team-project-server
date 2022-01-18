@@ -15,8 +15,7 @@ const addTransaction = async (req, res) => {
   const { _id, type, completedAt, description, category, amount } = await Transaction
     .create({ ...newTransaction, owner })
 
-  const { totalCost: balance } = await Balance
-    .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового owner-а
+  const { value: balance } = await Balance.findOne({ owner }) // убрать тестового owner-а
 
   res.status(201).json({
     status: 'success',

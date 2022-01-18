@@ -1,6 +1,6 @@
 const { Category } = require('../../models')
 
-const { createUrl } = require('../../utils')
+const { createUrl, dataNormalizer } = require('../../utils')
 
 const getCategories = async (req, res) => {
   const result = await Category
@@ -17,7 +17,7 @@ const getCategories = async (req, res) => {
     status: 'success',
     code: 200,
     data: {
-      result
+      result: dataNormalizer(result, '_id')
     }
   })
 }

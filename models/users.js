@@ -76,6 +76,7 @@ const User = model('user', userSchema)
 
 module.exports = {
   User,
-  userRegisterJoiSchema
+  userRegisterJoiSchema,
+  userLoginJoiSchema
 }
 

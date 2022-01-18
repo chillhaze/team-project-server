@@ -19,4 +19,10 @@ router.post('/logout')
 // update verification
 router.get('/verify/:verificationToken')
 
+// redirect to google authorisation
+router.get("/google", controllerWrapper(control.AuthControllers.googleAuth));
+
+// redirect to the frontend
+router.get("/google-redirect", controllerWrapper(control.AuthControllers.googleRedirect));
+
 module.exports = router

@@ -22,7 +22,7 @@
       "url": "http://localhost:3000/api"
     },
     {
-      "url": "https://connections-api.herokuapp.com/any-route/api"
+      "url": "https://kapusta-app-teamproject.herokuapp.com/api"
     }
   ],
 

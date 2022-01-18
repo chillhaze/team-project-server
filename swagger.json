@@ -1,0 +1,401 @@
+{
+  "openapi": "3.0.1",
+
+  "info": {
+    "version": "1.0.0",
+
+    "title": "API Docs",
+    "description": "Showing off kapu$ta api",
+
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+
+  "consumes": ["application/json"],
+
+  "produces": ["application/json"],
+
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    },
+    {
+      "url": "https://connections-api.herokuapp.com/any-route/api"
+    }
+  ],
+
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Balance",
+      "description": "Balance endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories endpoint"
+    },
+    {
+      "name": "Reports",
+      "description": "Reports endpoint"
+    },
+    {
+      "name": "Icons",
+      "description": "Icons endpoint"
+    },
+    {
+      "name": "Avatars",
+      "description": "Avatars endpoint"
+    }
+  ],
+
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+
+        "parameters": [],
+
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Bad request (invalid request body)",
+
+            "content": {}
+          },
+
+          "409": {
+            "description": "Provided email already exists",
+
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "login user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verificationToken",
+            "required": true,
+            "schema": { "type": "string", "description": "user's token" }
+          }
+        ]
+      }
+    },
+    "/balance": {
+      "get": {
+        "tags": ["Balance"],
+        "summary": "Get user's balance",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Balance"],
+        "summary": "Create user's balance",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "create balance",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": { "tags": ["Categories"] },
+      "post": { "tags": ["Categories"] }
+    },
+    "/reports/summary": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "type": "string",
+            "description": "type of report"
+          },
+          {
+            "in": "path",
+            "name": "period",
+            "type": "string",
+            "required": true,
+            "description": "period"
+          }
+        ]
+      }
+    },
+    "/reports/detailed": { "get": { "tags": ["Reports"] } },
+    "/icons": { "get": { "tags": ["Icons"] } },
+    "/avatars": { "get": { "tags": ["Avatars"] } }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+
+        "required": ["email", "password"],
+
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Pedro Gonzales"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "user@mail.com"
+          },
+
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+
+        "required": ["email", "password"],
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "user@mail.com"
+          },
+
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "user's name",
+                    "example": "Pedro Gonzales"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "user's email",
+                    "example": "user@mail.com"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "token"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "description": "user's avatar URL"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "RegistrationResponse": {
+        "type": "object",
+
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "user's name" },
+                  "email": { "type": "email", "description": "user's email" },
+                  "verifyToken": { "type": "string", "description": "token" },
+                  "avatarUrl": {
+                    "type": "string",
+                    "description": "user's avatar URL"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": {
+            "user": {
+              "name": "userName",
+              "email": "userName@mail.com",
+              "verifyToken": "inn2nsdukybcsudy.dcsiudcsdbcsd.sdcnscbasa",
+              "avatarUrl": "http://gravatar.com/1234"
+            }
+          }
+        }
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "code": { "type": "integer" },
+          "result": {
+            "type": "number",
+            "description": "balance",
+            "example": "5000.00"
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "result": "5000.00"
+        }
+      },
+      "BalanceRequest": {
+        "type": "object",
+        "properties": {
+          "totalCost": {
+            "type": "number",
+            "description": "initialize balance",
+            "required": true,
+            "example": "5000.00"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

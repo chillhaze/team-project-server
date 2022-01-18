@@ -31,6 +31,22 @@
     {
       "name": "Balance",
       "description": "Balance endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories endpoint"
+    },
+    {
+      "name": "Reports",
+      "description": "Reports endpoint"
+    },
+    {
+      "name": "Icons",
+      "description": "Icons endpoint"
+    },
+    {
+      "name": "Avatars",
+      "description": "Avatars endpoint"
     }
   ],
 
@@ -121,11 +137,33 @@
         }
       }
     },
-    "/auth/logout": {},
-    "/auth/verify": {},
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verificationToken",
+            "required": true,
+            "schema": { "type": "string", "description": "user's token" }
+          }
+        ]
+      }
+    },
     "/balance": {
       "get": {
         "tags": ["Balance"],
+        "summary": "Get user's balance",
         "security": [
           {
             "Bearer": []
@@ -146,6 +184,7 @@
       },
       "post": {
         "tags": ["Balance"],
+        "summary": "Create user's balance",
         "security": [
           {
             "Bearer": []
@@ -163,7 +202,40 @@
           }
         }
       }
-    }
+    },
+    "/categories": {
+      "get": { "tags": ["Categories"] },
+      "post": { "tags": ["Categories"] }
+    },
+    "/reports/summary": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "type": "string",
+            "description": "type of report"
+          },
+          {
+            "in": "path",
+            "name": "period",
+            "type": "string",
+            "required": true,
+            "description": "period"
+          }
+        ]
+      }
+    },
+    "/reports/detailed": { "get": { "tags": ["Reports"] } },
+    "/icons": { "get": { "tags": ["Icons"] } },
+    "/avatars": { "get": { "tags": ["Avatars"] } }
   },
 
   "components": {

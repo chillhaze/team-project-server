@@ -3,7 +3,7 @@ const { Schema, model, SchemaTypes } = require('mongoose')
 
 const balanceSchema = Schema(
   {
-    totalCost: Number,
+    value: Number,
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',

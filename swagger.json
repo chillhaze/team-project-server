@@ -203,6 +203,18 @@
               }
             }
           }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -380,7 +392,7 @@
       "BalanceRequest": {
         "type": "object",
         "properties": {
-          "totalCost": {
+          "value": {
             "type": "number",
             "description": "initialize balance",
             "required": true,

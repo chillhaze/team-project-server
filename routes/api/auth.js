@@ -1,8 +1,7 @@
 const express = require('express');
-const {validation, controllerWrapper} = require("../../middlewares/");
+const {controllerWrapper, validation, authorization} = require("../../middlewares/");
 const {authControllers: control} = require("../../controllers/");
-const {userLoginJoiSchema} = require("../../models/users");
-const {userRegisterJoiSchema} = require("../../models/users");
+const {userLoginJoiSchema, userRegisterJoiSchema} = require("../../models/users");
 
 
 const router = express.Router()
@@ -14,7 +13,7 @@ router.post('/register', validation(userRegisterJoiSchema), controllerWrapper(co
 router.post('/login', validation(userLoginJoiSchema), controllerWrapper(control.AuthControllers.login));
 
 // Logout user
-router.post('/logout')
+router.post('/logout', authorization, controllerWrapper(control.AuthControllers.logout));
 
 // update verification
 router.get('/verify/:verificationToken')

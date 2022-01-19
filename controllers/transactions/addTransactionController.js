@@ -1,7 +1,8 @@
 const { Transaction, Balance } = require('../../models')
 
 const addTransaction = async (req, res) => {
-  // const { _id: owner } = req.user
+  const { _id: owner } = req.user
+
   const newTransaction = {
     type: req.body.type,
     completedAt: new Date(req.body.period).toISOString(),
@@ -10,12 +11,10 @@ const addTransaction = async (req, res) => {
     amount: req.body.amount
   }
 
-  const owner = '61e1793bb8d7c55e164155bd' // удалиться как заработает логинизация пользователя
-
   const { _id, type, completedAt, description, category, amount } = await Transaction
     .create({ ...newTransaction, owner })
 
-  const { value: balance } = await Balance.findOne({ owner }) // убрать тестового owner-а
+  const { value: balance } = await Balance.findOne({ owner })
 
   res.status(201).json({
     status: 'success',

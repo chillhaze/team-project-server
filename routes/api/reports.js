@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const { getSummary, getDetailedInfo } = require('../../controllers')
-const { controllerWrapper: wrapper } = require('../../middlewares')
+const { controllerWrapper: wrapper, authorization } = require('../../middlewares')
 
-router.get('/summary', wrapper(getSummary))
-router.get('/detailed', wrapper(getDetailedInfo))
+router.get('/summary', authorization, wrapper(getSummary))
+router.get('/detailed', authorization, wrapper(getDetailedInfo))
 
 module.exports = router

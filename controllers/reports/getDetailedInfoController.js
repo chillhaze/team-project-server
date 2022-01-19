@@ -4,30 +4,29 @@ const { Transaction } = require('../../models')
 const { getMonthOfYearInterval, makeDetailedReport, detailedInfoUpdate } = require('../../utils')
 
 const getDetailedInfo = async (req, res) => {
-  // const { _id: owner } = req.user
+  const { _id: owner } = req.user
   const { year, month } = req.query
 
   const [minPeriod, maxPeriod] = getMonthOfYearInterval(year, month)
 
-  // const result = await Transaction
-  //   .find({
-  //     owner,
-  //     type,
-  //     completedAt: {
-  //       $gte: minPeriod,
-  //       $lt: maxPeriod
-  //     }
-  //   })
-  //   .select({ owner: 0, completedAt: 0, type: 0, createdAt: 0, updatedAt: 0 })
-
-  const transactions = await Transaction // удалиться как заработает логинизация пользователя
+  const transactions = await Transaction
     .find({
+      owner,
       completedAt: {
         $gte: minPeriod,
         $lt: maxPeriod
       }
     })
-    .select({ owner: 0, createdAt: 0, updatedAt: 0 })
+    .select({ owner: 0, completedAt: 0, createdAt: 0, updatedAt: 0 })
+
+  // const transactions = await Transaction // удалиться как заработает логинизация пользователя
+  //   .find({
+  //     completedAt: {
+  //       $gte: minPeriod,
+  //       $lt: maxPeriod
+  //     }
+  //   })
+  //   .select({ owner: 0, createdAt: 0, updatedAt: 0 })
 
   if (transactions.length === 0) throw createError(404, 'Not found')
 

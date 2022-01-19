@@ -285,6 +285,40 @@
       }
     },
     "/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": { "type": "string", "example": "['debit' || 'credit']" }
+          },
+          {
+            "in": "path",
+            "name": "period",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2030-01-22T16:23:45.678Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": ["Transactions"],
         "summary": "Create transaction",
@@ -306,40 +340,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": ["Transactions"],
-        "summary": "Get transactions",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "type",
-            "required": true,
-            "schema": { "type": "string", "example": "['debit' || 'credit']" }
-          },
-          {
-            "in": "path",
-            "name": "period",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "дата в форматі ISO 8601 (метод toISOString())"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionsResponse"
                 }
               }
             }
@@ -673,7 +673,7 @@
                       },
                       "completedAt": {
                         "type": "string",
-                        "example": "дата в форматі ISO 8601 (метод toISOString())"
+                        "example": "2030-01-22T16:23:45.678Z"
                       },
                       "description": { "type": "string" },
                       "category": {

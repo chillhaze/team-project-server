@@ -1,19 +1,17 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
 // const Joi = require('joi')
 
-const balanceSchema = Schema({
-  deposit: {
-    type: Number,
-    default: 0
+const balanceSchema = Schema(
+  {
+    value: Number,
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+    },
   },
-  totalCost: Number,
-  totalIncome: Number,
-  owner: {
-    type: SchemaTypes.ObjectId,
-    ref: 'user'
-  }
-}, { versionKey: false, timestamps: true })
+  { versionKey: false, timestamps: true },
+)
 
 const Balance = model('balance', balanceSchema)
 
-module.exports = { Balance }
+module.exports = Balance

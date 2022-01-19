@@ -44,14 +44,17 @@ const transactionSchema = Schema({
 transactionSchema.pre('save', { document: true }, async function (next) {
   const { owner, type, amount } = this
 
-  const balance = await model(MODELS.BALANCE)
-    .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового пользователя
+  const balance = await model(MODELS.BALANCE).findOne({ owner })
 
   if (!balance) {
     throw new Error('Balance not set')
   }
 
-  balance.totalCost += type === TRANSACTION_TYPES.DEBIT ? amount : -1 * amount
+  if (type === TRANSACTION_TYPES.CREDIT && balance.value < amount) {
+    throw new Error('insufficient balance')
+  }
+
+  balance.value += type === TRANSACTION_TYPES.DEBIT ? amount : -1 * amount
   balance.save()
   next()
 })
@@ -69,11 +72,14 @@ transactionSchema.pre('findOneAndRemove', { document: false, query: true }, asyn
 
   const { owner, type, amount } = transaction
 
-  const balance = await model(MODELS.BALANCE)
-    .findOne({ owner: '61e71b5895d023fab1ba76e8' }) // убрать тестового пользователя
+  const balance = await model(MODELS.BALANCE).findOne({ owner })
 
   if (!balance) {
     throw new Error('Balance not set')
+  }
+
+  if (type === TRANSACTION_TYPES.DEBIT && balance.value < amount) {
+    throw new Error('Execution error. Negative balance expected')
   }
 
   balance.totalCost += type === TRANSACTION_TYPES.DEBIT ? -1 * amount : amount

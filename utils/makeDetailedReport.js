@@ -1,11 +1,16 @@
 const { nanoid } = require('nanoid')
 
+const TRANSACTION_TYPES = {
+  DEBIT: 'debit',
+  CREDIT: 'credit'
+}
+
 const makeDetailedReport = transactionsArr => {
   // counts total income & total costs
   const [totalIncome, totalCosts] = transactionsArr.reduce((acc, elem) => {
     const tmp = [...acc]
 
-    elem.type === 'debit'
+    elem.type === TRANSACTION_TYPES.DEBIT
       ? tmp[0] += elem.amount
       : tmp[1] += elem.amount
 

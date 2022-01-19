@@ -39,13 +39,6 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 }
 
-const userLoginJoiSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
-});
-
-
-
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 }
@@ -68,9 +61,10 @@ const userRegisterJoiSchema = Joi.object({
   name: Joi.string().min(6).max(20)
 });
 
-userSchema.post('save', () => {
-  this.name = this.email.split('@')[0]
-})
+const userLoginJoiSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
+});
 
 const User = model('user', userSchema)
 

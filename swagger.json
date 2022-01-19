@@ -57,7 +57,7 @@
     "/auth/register": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "User's registration",
 
         "parameters": [],
 
@@ -109,6 +109,7 @@
     },
     "/auth/login": {
       "post": {
+        "summary": "User's login",
         "tags": ["Auth"],
         "security": [
           {
@@ -116,7 +117,6 @@
           }
         ],
         "requestBody": {
-          "description": "login user",
           "required": true,
           "content": {
             "application/json": {
@@ -142,17 +142,24 @@
     },
     "/auth/logout": {
       "post": {
+        "summary": "user's logout",
         "tags": ["Auth"],
         "security": [
           {
             "Bearer": []
           }
-        ]
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
       }
     },
     "/auth/verify/{verificationToken}": {
       "get": {
         "tags": ["Auth"],
+        "summary": "in progress...",
         "parameters": [
           {
             "in": "path",
@@ -160,7 +167,19 @@
             "required": true,
             "schema": { "type": "string", "description": "user's token" }
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/balance": {
@@ -219,11 +238,28 @@
       }
     },
     "/categories": {
-      "get": { "tags": ["Categories"] },
-      "post": { "tags": ["Categories"] }
+      "get": {
+        "tags": ["Categories"],
+        "summary": "get all categories",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": { "tags": ["Categories"], "summary": "in progress..." }
     },
     "/reports/summary": {
       "get": {
+        "summary": "in progress...",
         "security": [
           {
             "Bearer": []
@@ -248,9 +284,11 @@
         ]
       }
     },
-    "/reports/detailed": { "get": { "tags": ["Reports"] } },
-    "/icons": { "get": { "tags": ["Icons"] } },
-    "/avatars": { "get": { "tags": ["Avatars"] } }
+    "/reports/detailed": {
+      "get": { "tags": ["Reports"], "summary": "in progress..." }
+    },
+    "/icons": { "get": { "tags": ["Icons"], "summary": "in progress..." } },
+    "/avatars": { "get": { "tags": ["Avatars"], "summary": "in progress..." } }
   },
 
   "components": {
@@ -397,6 +435,19 @@
             "description": "initialize balance",
             "required": true,
             "example": "5000.00"
+          }
+        }
+      },
+      "CategoryResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "['debit' || 'credit'] category",
+              "example": "debit"
+            }
           }
         }
       }

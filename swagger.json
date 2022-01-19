@@ -19,10 +19,10 @@
 
   "servers": [
     {
-      "url": "http://localhost:3000/api"
+      "url": "https://kapusta-app-teamproject.herokuapp.com/api"
     },
     {
-      "url": "https://kapusta-app-teamproject.herokuapp.com/api"
+      "url": "http://localhost:3000/api"
     }
   ],
 
@@ -248,14 +248,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CategoryResponse"
+                  "$ref": "#/components/schemas/CategoriesResponse"
                 }
               }
             }
           }
         }
       },
-      "post": { "tags": ["Categories"], "summary": "in progress..." }
+      "post": {
+        "tags": ["Categories"],
+        "summary": "create category",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/reports/summary": {
       "get": {
@@ -438,17 +464,71 @@
           }
         }
       },
-      "CategoryResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "description": "['debit' || 'credit'] category",
-              "example": "debit"
+      "CategoriesResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "entities": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "object",
+                        "properties": {
+                          "_id": { "type": "string" },
+                          "type": { "type": "string" },
+                          "name": { "type": "string" },
+                          "iconUrl": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
+        }
+      },
+      "CategoryResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "_id": { "type": "string" },
+                  "type": { "type": "string" },
+                  "name": { "type": "string" },
+                  "iconUrl": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CategoryRequest": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "required": true },
+          "name": { "type": "string", "required": true }
         }
       }
     },

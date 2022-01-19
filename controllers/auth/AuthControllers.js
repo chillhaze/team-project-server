@@ -7,11 +7,10 @@ const jwt = require('jsonwebtoken')
 const { Unauthorized } = require('http-errors')
 const { Conflict } = require('http-errors')
 const { nanoid } = require('nanoid')
-const queryString = require("query-string");
-const axios = require("axios");
+const queryString = require("query-string")
+const axios = require("axios")
 
 class AuthControllers {
-
     async logout(req, res) {
         const { _id } = req.user;
         const user = await User.findByIdAndUpdate(_id, { token: null });

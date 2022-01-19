@@ -7,8 +7,8 @@ const Joi = require('joi');
 
 const userSchema = new Schema({
   password: {
-    type: String,
-    required: [true, 'Password is required']
+    type: String
+    //required: [true, 'Password is required']
   },
   email: {
     type: String,
@@ -30,8 +30,8 @@ const userSchema = new Schema({
     default: false
   },
   verifyToken: {
-    type: String,
-    required: [true, 'Verify token is required']
+    type: String
+    //required: [true, 'Verify token is required']
   }
 }, { versionKey: false, timestamps: true })
 
@@ -52,7 +52,7 @@ userSchema.methods.comparePassword = function (password) {
 }
 
 userSchema.methods.setAvatar = function(email) {
-  this.avatarURL = gravatar.url(email);
+  this.avatarURL = gravatar.url(email).substring(2);
 }
 
 const userRegisterJoiSchema = Joi.object({

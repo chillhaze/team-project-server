@@ -39,6 +39,7 @@
       "name": "Categories",
       "description": "Categories endpoint"
     },
+    { "name": "Transactions", "description": "Transaction endpoints" },
     {
       "name": "Reports",
       "description": "Reports endpoint"
@@ -283,6 +284,96 @@
         }
       }
     },
+    "/transactions": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create transaction",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": { "type": "string", "example": "['debit' || 'credit']" }
+          },
+          {
+            "in": "path",
+            "name": "period",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "дата в форматі ISO 8601 (метод toISOString())"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete transaction",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": { "type": "string", "description": "transaction Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDeleteResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/reports/summary": {
       "get": {
         "summary": "in progress...",
@@ -397,7 +488,6 @@
           }
         }
       },
-
       "RegistrationResponse": {
         "type": "object",
 
@@ -489,7 +579,10 @@
                         "type": "object",
                         "properties": {
                           "_id": { "type": "string" },
-                          "type": { "type": "string" },
+                          "type": {
+                            "type": "string",
+                            "example": "['debit' || 'credit']"
+                          },
                           "name": { "type": "string" },
                           "iconUrl": { "type": "string" }
                         }
@@ -515,7 +608,10 @@
                 "type": "object",
                 "properties": {
                   "_id": { "type": "string" },
-                  "type": { "type": "string" },
+                  "type": {
+                    "type": "string",
+                    "example": "['debit' || 'credit']"
+                  },
                   "name": { "type": "string" },
                   "iconUrl": { "type": "string" }
                 }
@@ -527,8 +623,124 @@
       "CategoryRequest": {
         "type": "object",
         "properties": {
-          "type": { "type": "string", "required": true },
+          "type": {
+            "type": "string",
+            "required": true,
+            "example": "['debit' || 'credit']"
+          },
           "name": { "type": "string", "required": true }
+        }
+      },
+      "TransactionRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "example": "['debit' || 'credit']"
+          },
+          "period": {
+            "type": "string",
+            "example": "дата в форматі ISO 8601 (метод toISOString())"
+          },
+          "description": {
+            "type": "string",
+            "example": "назва 2-20 символів кирил, англ букви, цифри та пробіли.  починається з букви"
+          },
+          "category": { "type": "string", "example": "id категорії" },
+          "amount": { "type": "number", "example": "число" }
+        }
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "transaction": {
+                    "type": "object",
+                    "properties": {
+                      "_id": { "type": "string" },
+                      "type": {
+                        "type": "string",
+                        "example": "['debit' || 'credit']"
+                      },
+                      "completedAt": {
+                        "type": "string",
+                        "example": "дата в форматі ISO 8601 (метод toISOString())"
+                      },
+                      "description": { "type": "string" },
+                      "category": {
+                        "type": "string",
+                        "example": "id категорії"
+                      },
+                      "amount": { "type": "number", "example": "5250.00" }
+                    }
+                  },
+                  "balance": {
+                    "type": "number",
+                    "example": "оновлений баланс"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransactionDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "balance": { "type": "number", "example": "оновлений баланс" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransactionsResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string" },
+                    "description": {
+                      "type": "string",
+                      "example": "bought a lot of beer on sale"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "id категорії"
+                    },
+                    "amount": { "type": "number", "example": "число" }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

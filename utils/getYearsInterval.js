@@ -1,5 +1,5 @@
 const getYearsInterval = date => {
-  const baseYear = new Date(date).getFullYear()
+  const baseYear = new Date(date.toString()).getFullYear()
 
   return (
     [

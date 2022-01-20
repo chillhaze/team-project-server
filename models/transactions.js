@@ -1,5 +1,4 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
-// const Joi = require('joi')
 
 const MODELS = {
   BALANCE: 'balance',

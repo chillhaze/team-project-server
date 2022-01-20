@@ -376,7 +376,7 @@
     },
     "/reports/summary": {
       "get": {
-        "summary": "in progress...",
+        "summary": "Summary transactions",
         "security": [
           {
             "Bearer": []
@@ -389,23 +389,74 @@
             "name": "type",
             "required": true,
             "type": "string",
-            "description": "type of report"
+            "description": "['debit' || 'credit']",
+            "example": "debit"
           },
           {
             "in": "path",
             "name": "period",
-            "type": "string",
+            "type": "integer",
             "required": true,
-            "description": "period"
+            "description": "year (format: yyyy. example: 2022)",
+            "example": "2022"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
       }
     },
     "/reports/detailed": {
-      "get": { "tags": ["Reports"], "summary": "in progress..." }
-    },
-    "/icons": { "get": { "tags": ["Icons"], "summary": "in progress..." } },
-    "/avatars": { "get": { "tags": ["Avatars"], "summary": "in progress..." } }
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Get report by year and month",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "type": "integer",
+            "required": true,
+            "description": "year (format: yyyy. example: 2022)",
+            "example": "2022"
+          },
+          {
+            "in": "path",
+            "name": "month",
+            "type": "integer",
+            "required": true,
+            "description": "month (from 0 - january to 11-december)",
+            "example": "11"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
   },
 
   "components": {
@@ -736,6 +787,144 @@
                       "example": "id категорії"
                     },
                     "amount": { "type": "number", "example": "число" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SummaryResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "description": "month index (0 - january, 1 - february, etc)",
+                      "example": 11
+                    }
+                  },
+                  "entities": {
+                    "type": "object",
+                    "properties": {
+                      "11": {
+                        "type": "object",
+                        "description": "month index (0 - january, 1 - february, etc)",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "month index (0 - january, 1 - february, etc)",
+                            "example": 11
+                          },
+                          "name": { "type": "string", "example": "december" },
+                          "amount": { "type": "number", "example": "3100.00" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "totalIncome": {
+                    "type": "number",
+                    "description": "",
+                    "example": "16000.00"
+                  },
+                  "totalCosts": {
+                    "type": "number",
+                    "description": "",
+                    "example": "3100"
+                  },
+                  "caregoriesByTypes": {
+                    "type": "object",
+                    "description": "",
+                    "properties": {
+                      "ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "entities": {
+                        "type": "object",
+                        "properties": {
+                          "[id]": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "string" },
+                              "type": {
+                                "type": "string",
+                                "example": "['debit' || 'credit']"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "",
+                                "example": "доп.доход"
+                              },
+                              "amount": { "type": "number", "description": "" },
+                              "iconUrl": {
+                                "type": "string",
+                                "description": ""
+                              },
+                              "catalog": {
+                                "type": "object",
+                                "properties": {
+                                  "ids": {
+                                    "type": "array",
+                                    "items": {
+                                      "[group name]": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "entities": {
+                                    "type": "object",
+                                    "properties": {
+                                      "[group name]": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": { "type": "string" },
+                                          "groupName": { "type": "string" },
+                                          "amount": {
+                                            "type": "number",
+                                            "example": ""
+                                          },
+                                          "totalCount": { "type": "integer" }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }

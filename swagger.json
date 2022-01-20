@@ -19,10 +19,10 @@
 
   "servers": [
     {
-      "url": "http://localhost:3000/api"
+      "url": "https://kapusta-app-teamproject.herokuapp.com/api"
     },
     {
-      "url": "https://kapusta-app-teamproject.herokuapp.com/api"
+      "url": "http://localhost:3000/api"
     }
   ],
 
@@ -39,6 +39,7 @@
       "name": "Categories",
       "description": "Categories endpoint"
     },
+    { "name": "Transactions", "description": "Transaction endpoints" },
     {
       "name": "Reports",
       "description": "Reports endpoint"
@@ -57,7 +58,7 @@
     "/auth/register": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "User's registration",
 
         "parameters": [],
 
@@ -109,6 +110,7 @@
     },
     "/auth/login": {
       "post": {
+        "summary": "User's login",
         "tags": ["Auth"],
         "security": [
           {
@@ -116,7 +118,6 @@
           }
         ],
         "requestBody": {
-          "description": "login user",
           "required": true,
           "content": {
             "application/json": {
@@ -142,17 +143,24 @@
     },
     "/auth/logout": {
       "post": {
+        "summary": "user's logout",
         "tags": ["Auth"],
         "security": [
           {
             "Bearer": []
           }
-        ]
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
       }
     },
     "/auth/verify/{verificationToken}": {
       "get": {
         "tags": ["Auth"],
+        "summary": "in progress...",
         "parameters": [
           {
             "in": "path",
@@ -160,7 +168,19 @@
             "required": true,
             "schema": { "type": "string", "description": "user's token" }
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/balance": {
@@ -219,11 +239,144 @@
       }
     },
     "/categories": {
-      "get": { "tags": ["Categories"] },
-      "post": { "tags": ["Categories"] }
+      "get": {
+        "tags": ["Categories"],
+        "summary": "get all categories",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriesResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "create category",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": { "type": "string", "example": "['debit' || 'credit']" }
+          },
+          {
+            "in": "path",
+            "name": "period",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2030-01-22T16:23:45.678Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create transaction",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete transaction",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": { "type": "string", "description": "transaction Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDeleteResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/reports/summary": {
       "get": {
+        "summary": "in progress...",
         "security": [
           {
             "Bearer": []
@@ -248,9 +401,11 @@
         ]
       }
     },
-    "/reports/detailed": { "get": { "tags": ["Reports"] } },
-    "/icons": { "get": { "tags": ["Icons"] } },
-    "/avatars": { "get": { "tags": ["Avatars"] } }
+    "/reports/detailed": {
+      "get": { "tags": ["Reports"], "summary": "in progress..." }
+    },
+    "/icons": { "get": { "tags": ["Icons"], "summary": "in progress..." } },
+    "/avatars": { "get": { "tags": ["Avatars"], "summary": "in progress..." } }
   },
 
   "components": {
@@ -333,7 +488,6 @@
           }
         }
       },
-
       "RegistrationResponse": {
         "type": "object",
 
@@ -397,6 +551,195 @@
             "description": "initialize balance",
             "required": true,
             "example": "5000.00"
+          }
+        }
+      },
+      "CategoriesResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "entities": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "object",
+                        "properties": {
+                          "_id": { "type": "string" },
+                          "type": {
+                            "type": "string",
+                            "example": "['debit' || 'credit']"
+                          },
+                          "name": { "type": "string" },
+                          "iconUrl": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CategoryResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "_id": { "type": "string" },
+                  "type": {
+                    "type": "string",
+                    "example": "['debit' || 'credit']"
+                  },
+                  "name": { "type": "string" },
+                  "iconUrl": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CategoryRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "example": "['debit' || 'credit']"
+          },
+          "name": { "type": "string", "required": true }
+        }
+      },
+      "TransactionRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "example": "['debit' || 'credit']"
+          },
+          "period": {
+            "type": "string",
+            "example": "дата в форматі ISO 8601 (метод toISOString())"
+          },
+          "description": {
+            "type": "string",
+            "example": "назва 2-20 символів кирил, англ букви, цифри та пробіли.  починається з букви"
+          },
+          "category": { "type": "string", "example": "id категорії" },
+          "amount": { "type": "number", "example": "число" }
+        }
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "transaction": {
+                    "type": "object",
+                    "properties": {
+                      "_id": { "type": "string" },
+                      "type": {
+                        "type": "string",
+                        "example": "['debit' || 'credit']"
+                      },
+                      "completedAt": {
+                        "type": "string",
+                        "example": "2030-01-22T16:23:45.678Z"
+                      },
+                      "description": { "type": "string" },
+                      "category": {
+                        "type": "string",
+                        "example": "id категорії"
+                      },
+                      "amount": { "type": "number", "example": "5250.00" }
+                    }
+                  },
+                  "balance": {
+                    "type": "number",
+                    "example": "оновлений баланс"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransactionDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "balance": { "type": "number", "example": "оновлений баланс" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransactionsResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "status of response" },
+          "code": { "type": "number", "description": "" },
+          "data": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string" },
+                    "description": {
+                      "type": "string",
+                      "example": "bought a lot of beer on sale"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "id категорії"
+                    },
+                    "amount": { "type": "number", "example": "число" }
+                  }
+                }
+              }
+            }
           }
         }
       }

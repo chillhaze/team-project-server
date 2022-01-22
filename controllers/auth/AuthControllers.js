@@ -40,7 +40,7 @@ class AuthControllers {
       id: user._id,
     }
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' })
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '999h' })
     await User.findByIdAndUpdate(user._id, { token })
     res.status(200).json({
       status: 200,
@@ -143,7 +143,7 @@ class AuthControllers {
       id: createdUser._id,
     }
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' })
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '999h' })
     await User.findByIdAndUpdate(createdUser._id, { token: token })
 
     return res.redirect(

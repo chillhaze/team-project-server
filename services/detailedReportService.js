@@ -1,6 +1,11 @@
 const { Transaction } = require('../models')
 const { groupByUniqueDescriptions, generalIndicatorsCounting } = require('../utils')
 
+const CATEGORY_TYPES = {
+  INCOME: 'income',
+  COST: 'cost'
+}
+
 const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
   // At the numerous requests of workers (c)
   // the formation of a detailed report is implemented by MongoDB resources
@@ -25,7 +30,7 @@ const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
         total: { $sum: '$amount' },
         nameArr: { $last: '$categoryInfo.name' },
         iconUrlArr: { $last: '$categoryInfo.iconUrl' },
-        detailed: { $push: { description: '$description', total: '$amount' } }
+        subcategories: { $push: { name: '$description', total: '$amount' } }
       }
     },
     {
@@ -35,7 +40,7 @@ const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
         total: 1,
         name: { $arrayElemAt: ['$nameArr', 0] },
         iconUrl: { $arrayElemAt: ['$iconUrlArr', 0] },
-        detailed: 1
+        subcategories: 1
       }
     }
   ])
@@ -44,7 +49,8 @@ const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
 
   // updates report by grouping its not unique detailed info
   const updatedReport = report.map(elem => {
-    elem.detailed = groupByUniqueDescriptions(elem.detailed)
+    elem.subcategories = groupByUniqueDescriptions(elem.subcategories)
+    elem.type = elem.type === 'credit' ? CATEGORY_TYPES.COST : CATEGORY_TYPES.INCOME
     return elem
   })
 

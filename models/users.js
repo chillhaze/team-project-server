@@ -58,7 +58,7 @@ userSchema.methods.setAvatar = function(email) {
 const userRegisterJoiSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  name: Joi.string().min(6).max(20)
+  name: Joi.string().max(25)
 });
 
 const userLoginJoiSchema = Joi.object({

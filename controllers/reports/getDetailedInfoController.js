@@ -1,7 +1,7 @@
 const createError = require('http-errors')
 
-const { Transaction } = require('../../models')
-const { getMonthOfYearInterval, makeDetailedReport, detailedInfoUpdate } = require('../../utils')
+const { getDetailedReport } = require('../../services')
+const { getMonthOfYearInterval, createUrl } = require('../../utils')
 
 const getDetailedInfo = async (req, res) => {
   const { _id: owner } = req.user
@@ -9,29 +9,16 @@ const getDetailedInfo = async (req, res) => {
 
   const [minPeriod, maxPeriod] = getMonthOfYearInterval(year, month)
 
-  const transactions = await Transaction
-    .find({
-      owner,
-      completedAt: {
-        $gte: minPeriod,
-        $lt: maxPeriod
-      }
-    })
-    .select({ owner: 0, completedAt: 0, createdAt: 0, updatedAt: 0 })
+  const detailedReport = await getDetailedReport(owner, minPeriod, maxPeriod)
 
-  // const transactions = await Transaction // удалиться как заработает логинизация пользователя
-  //   .find({
-  //     completedAt: {
-  //       $gte: minPeriod,
-  //       $lt: maxPeriod
-  //     }
-  //   })
-  //   .select({ owner: 0, createdAt: 0, updatedAt: 0 })
+  if (!detailedReport) throw createError(404, 'Not found')
 
-  if (transactions.length === 0) throw createError(404, 'Not found')
+  const { report, totalIncome, totalCosts } = detailedReport
 
-  const { totalIncome, totalCosts, normalizedData: data } = makeDetailedReport(transactions)
-  const updatedData = await detailedInfoUpdate(data, req)
+  // make icon Url for each category
+  report.forEach((elem, i) => {
+    report[i].iconUrl = createUrl({ req, urlCombinedPath: elem.iconUrl })
+  })
 
   res.status(200).json({
     status: 'success',
@@ -40,7 +27,7 @@ const getDetailedInfo = async (req, res) => {
       result: {
         totalIncome,
         totalCosts,
-        caregoriesByTypes: updatedData
+        categories: report
       }
     }
   })

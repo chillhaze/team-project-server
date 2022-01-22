@@ -16,7 +16,7 @@ const getTransactionsPerDay = async (req, res) => {
         $lt: maxPeriod
       }
     })
-    .select({ owner: 0, completedAt: 0, type: 0, createdAt: 0, updatedAt: 0 })
+    .select({ owner: 0, type: 0, createdAt: 0, updatedAt: 0 })
 
   res.status(200).json({
     status: 'success',

@@ -150,6 +150,23 @@ class AuthControllers {
       `${FRONTEND_URL}?email=${userData.data.email}&token=${token}`,
     )
   }
+
+  async getCurrentUser(req, res) {
+    const {name, email, avatarURL, token} = req.user;
+    res.json({
+        status: "success",
+        code: 200,
+        data: {
+            user: {
+                email,
+                name,
+                avatarURL,
+                token
+            }
+        }
+    })
+  }
+  
 }
 
 module.exports = new AuthControllers()

@@ -11,7 +11,19 @@ const getDetailedInfo = async (req, res) => {
 
   const detailedReport = await getDetailedReport(owner, minPeriod, maxPeriod)
 
-  if (!detailedReport) throw createError(404, 'Not found')
+  if (!detailedReport) {
+    res.status(200).json({
+      status: 'success',
+      code: 200,
+      data: {
+        result: {
+          totalIncome: 0,
+          totalCosts: 0,
+          categories: []
+        }
+      }
+    })
+  }
 
   const { report, totalIncome, totalCosts } = detailedReport
 

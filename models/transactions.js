@@ -81,7 +81,7 @@ transactionSchema.pre('findOneAndRemove', { document: false, query: true }, asyn
     throw new Error('Execution error. Negative balance expected')
   }
 
-  balance.totalCost += type === TRANSACTION_TYPES.DEBIT ? -1 * amount : amount
+  balance.value += type === TRANSACTION_TYPES.DEBIT ? -1 * amount : amount
   balance.save()
   next()
 })

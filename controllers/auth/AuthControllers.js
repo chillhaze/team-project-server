@@ -15,6 +15,9 @@ const { Conflict } = require('http-errors')
 const { nanoid } = require('nanoid')
 const queryString = require('query-string')
 const axios = require('axios')
+const avatarsDirectory = path.join(__dirname, "../../", "public", "avatars");
+const fs = require('fs/promises');
+var Jimp = require('jimp');
 
 class AuthControllers {
   async logout(req, res) {
@@ -152,21 +155,39 @@ class AuthControllers {
   }
 
   async getCurrentUser(req, res) {
-    const {name, email, avatarURL, token} = req.user;
+    const { name, email, avatarURL, token } = req.user;
     res.json({
-        status: "success",
-        code: 200,
-        data: {
-            user: {
-                email,
-                name,
-                avatarURL,
-                token
-            }
+      status: "success",
+      code: 200,
+      data: {
+        user: {
+          email,
+          name,
+          avatarURL,
+          token
         }
+      }
     })
   }
-  
+
+  async updateAvatar(req, res) {
+    const { path: tempDir, originalname } = req.file;
+    const { _id: id } = req.user;
+    const imageName = `${id}_${originalname}`;
+    try {
+      const resultUpload = path.join(avatarsDirectory, imageName);
+      await Jimp.read(tempDir).then(avatar => avatar.resize(32, 32).write(tempDir));
+      await fs.rename(tempDir, resultUpload);
+      const avatarURL = `avatars/${imageName}`;
+      await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
+      res.json({ avatarURL });
+    } catch (error) {
+      await fs.unlink(tempDir);
+      throw new Unauthorized("Not authorized");
+    }
+  }
+
 }
 
 module.exports = new AuthControllers()

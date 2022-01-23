@@ -52,7 +52,7 @@ userSchema.methods.comparePassword = function (password) {
 }
 
 userSchema.methods.setAvatar = function(email) {
-  this.avatarURL = gravatar.url(email).substring(2);
+  this.avatarURL = `http://${gravatar.url(email).substring(2)}`;
 }
 
 const userRegisterJoiSchema = Joi.object({

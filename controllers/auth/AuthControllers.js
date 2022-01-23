@@ -147,7 +147,7 @@ class AuthControllers {
     await User.findByIdAndUpdate(createdUser._id, { token: token })
 
     return res.redirect(
-      `${FRONTEND_URL}?email=${userData.data.email}&token=${token}&avatarURL=${user.data.picture}&name=${createdUser.name}`,
+      `${FRONTEND_URL}?email=${userData.data.email}&token=${token}&avatarURL=${userData.data.picture}&name=${createdUser.name}`,
     )
   }
 

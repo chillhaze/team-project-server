@@ -770,6 +770,10 @@
                   "type": "object",
                   "properties": {
                     "_id": { "type": "string" },
+                    "completedAt": {
+                      "type": "string",
+                      "example": "2022-04-30T21:00:00.000Z"
+                    },
                     "description": {
                       "type": "string",
                       "example": "bought a lot of beer on sale"
@@ -851,69 +855,30 @@
                     "description": "",
                     "example": "3100"
                   },
-                  "caregoriesByTypes": {
+                  "caregories": {
                     "type": "object",
                     "description": "",
                     "properties": {
-                      "ids": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
+                      "_id": { "type": "string" },
+                      "type": {
+                        "type": "string",
+                        "example": "[cost || income]"
                       },
-                      "entities": {
+                      "total": { "type": "number", "example": "1500" },
+                      "name": { "type": "string", "example": "Всё для дома" },
+                      "iconUrl": {
+                        "type": "string",
+                        "example": "http://localhost:8080/icons/61e1796fb8d7c55e164168fc.svg"
+                      },
+                      "subcategories": {
                         "type": "object",
                         "properties": {
-                          "[id]": {
-                            "type": "object",
-                            "properties": {
-                              "id": { "type": "string" },
-                              "type": {
-                                "type": "string",
-                                "example": "['debit' || 'credit']"
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "",
-                                "example": "доп.доход"
-                              },
-                              "amount": { "type": "number", "description": "" },
-                              "iconUrl": {
-                                "type": "string",
-                                "description": ""
-                              },
-                              "catalog": {
-                                "type": "object",
-                                "properties": {
-                                  "ids": {
-                                    "type": "array",
-                                    "items": {
-                                      "[group name]": {
-                                        "type": "string"
-                                      }
-                                    }
-                                  },
-                                  "entities": {
-                                    "type": "object",
-                                    "properties": {
-                                      "[group name]": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": { "type": "string" },
-                                          "groupName": { "type": "string" },
-                                          "amount": {
-                                            "type": "number",
-                                            "example": ""
-                                          },
-                                          "totalCount": { "type": "integer" }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                          "id": { "type": "string", "example": "599ug2GrIDX" },
+                          "name": {
+                            "type": "string",
+                            "example": "Бытовая химия"
+                          },
+                          "total": { "type": "number", "example": "1500" }
                         }
                       }
                     }

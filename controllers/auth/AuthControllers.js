@@ -188,6 +188,29 @@ class AuthControllers {
     }
   }
 
+  async updateUserName(req, res) {
+    const { _id: id } = req.user;
+    const { name } = req.body;
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Unauthorized("Cant update name of not authentificated user");
+    }
+    await User.findByIdAndUpdate(id, {name});
+    const {avatarURL, email, token} = user;
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        user: {
+          name,
+          avatarURL,
+          email,
+          token
+        }
+      }
+    });
+  }
+
 }
 
 module.exports = new AuthControllers()

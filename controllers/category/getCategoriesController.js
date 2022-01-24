@@ -17,7 +17,7 @@ const getCategories = async (req, res) => {
     status: 'success',
     code: 200,
     data: {
-      result: dataNormalizer(result, '_id')
+      result
     }
   })
 }

@@ -43,14 +43,6 @@
     {
       "name": "Reports",
       "description": "Reports endpoint"
-    },
-    {
-      "name": "Icons",
-      "description": "Icons endpoint"
-    },
-    {
-      "name": "Avatars",
-      "description": "Avatars endpoint"
     }
   ],
 

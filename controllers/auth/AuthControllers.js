@@ -178,7 +178,7 @@ class AuthControllers {
       const resultUpload = path.join(avatarsDirectory, imageName);
       await Jimp.read(tempDir).then(avatar => avatar.resize(32, 32).write(tempDir));
       await fs.rename(tempDir, resultUpload);
-      const avatarURL = `avatars/${imageName}`;
+      const avatarURL = `https://kapusta-app-teamproject.herokuapp.com/avatars/${imageName}`;
       await User.findByIdAndUpdate(req.user._id, { avatarURL });
 
       res.json({ avatarURL });
@@ -186,6 +186,29 @@ class AuthControllers {
       await fs.unlink(tempDir);
       throw new Unauthorized("Not authorized");
     }
+  }
+
+  async updateUserName(req, res) {
+    const { _id: id } = req.user;
+    const { name } = req.body;
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Unauthorized("Cant update name of not authentificated user");
+    }
+    await User.findByIdAndUpdate(id, {name});
+    const {avatarURL, email, token} = user;
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        user: {
+          name,
+          avatarURL,
+          email,
+          token
+        }
+      }
+    });
   }
 
 }

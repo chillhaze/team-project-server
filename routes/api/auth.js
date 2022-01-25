@@ -24,4 +24,7 @@ router.get("/google", controllerWrapper(control.AuthControllers.googleAuth));
 // redirect to the frontend
 router.get("/google-redirect", controllerWrapper(control.AuthControllers.googleRedirect));
 
+//verification of token
+router.get("/verify/:verifyToken", controllerWrapper(control.AuthControllers.verification));
+
 module.exports = router

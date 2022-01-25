@@ -6,6 +6,7 @@ const getYearsInterval = require('./getYearsInterval')
 const dataNormalizer = require('./dataNormalizer')
 const groupByUniqueDescriptions = require('./groupByUniqueDescriptions')
 const generalIndicatorsCounting = require('./generalIndicatorsCounting')
+const sendEmail = require('./sendEmail')
 
 module.exports = {
   createUrl,
@@ -15,5 +16,6 @@ module.exports = {
   getYearsInterval,
   dataNormalizer,
   groupByUniqueDescriptions,
-  generalIndicatorsCounting
+  generalIndicatorsCounting,
+  sendEmail
 }

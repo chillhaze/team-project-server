@@ -55,6 +55,10 @@ userSchema.methods.setAvatar = function(email) {
   this.avatarURL = `http://${gravatar.url(email).substring(2)}`;
 }
 
+userSchema.methods.setToken = function (verifyToken) {
+  this.verifyToken = verifyToken;
+}
+
 const userRegisterJoiSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),

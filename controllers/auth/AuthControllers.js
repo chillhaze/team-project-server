@@ -19,6 +19,7 @@ const avatarsDirectory = path.join(__dirname, "../../", "public", "avatars")
 const fs = require('fs/promises')
 var Jimp = require('jimp')
 const { sendEmail } = require('../../utils/')
+const {makeEmail} = require('../../utils');
 
 class AuthControllers {
   async logout(req, res) {
@@ -80,10 +81,11 @@ class AuthControllers {
     newUser.setToken(verifyToken);
     await newUser.save()
 
+    const mailMessage = makeEmail(newUser.name.toString(), `${FRONTEND_URL}/verify?verifyToken=${verifyToken}`);
     const mailToUser = {
       to: email,
       subject: "Register confirmation",
-      html: `<a target="_blank" href="${FRONTEND_URL}/verify?verifyToken=${verifyToken}">Confirm email</a>`
+      html: mailMessage
     };
 
     await sendEmail(mailToUser);

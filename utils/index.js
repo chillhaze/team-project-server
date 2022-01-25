@@ -7,6 +7,7 @@ const dataNormalizer = require('./dataNormalizer')
 const groupByUniqueDescriptions = require('./groupByUniqueDescriptions')
 const generalIndicatorsCounting = require('./generalIndicatorsCounting')
 const sendEmail = require('./sendEmail')
+const makeEmail = require('.//makeEmail')
 
 module.exports = {
   createUrl,
@@ -17,5 +18,6 @@ module.exports = {
   dataNormalizer,
   groupByUniqueDescriptions,
   generalIndicatorsCounting,
-  sendEmail
+  sendEmail,
+  makeEmail
 }

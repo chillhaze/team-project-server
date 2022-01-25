@@ -4,14 +4,15 @@ const ERROR_MESSAGES = require('../../validationErrorMessages')
 
 const TRANSACTION_TYPES = {
   DEBIT: 'debit',
-  CREDIT: 'credit'
+  CREDIT: 'credit',
+  ALL: 'all'
 }
 
 const querySchema = Joi.object({
   type: Joi.string()
     .required()
     .trim()
-    .valid(TRANSACTION_TYPES.DEBIT, TRANSACTION_TYPES.CREDIT)
+    .valid(TRANSACTION_TYPES.DEBIT, TRANSACTION_TYPES.CREDIT, TRANSACTION_TYPES.ALL)
     .messages({
       'any.required': ERROR_MESSAGES.missingTypeQueryString,
       'any.only': ERROR_MESSAGES.invalidTypeQueryStringFormat

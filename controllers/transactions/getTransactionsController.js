@@ -12,8 +12,8 @@ const getTransactionsPerDay = async (req, res) => {
       owner,
       type,
       completedAt: {
-        $gte: minPeriod,
-        $lt: maxPeriod
+        $gte: new Date(minPeriod),
+        $lt: new Date(maxPeriod)
       }
     })
     .select({ owner: 0, type: 0, createdAt: 0, updatedAt: 0 })

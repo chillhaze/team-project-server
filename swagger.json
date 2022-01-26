@@ -390,10 +390,10 @@
           {
             "in": "path",
             "name": "period",
-            "type": "integer",
+            "type": "string",
             "required": true,
-            "description": "year (format: yyyy. example: 2022)",
-            "example": "2022"
+            "description": "date in ISO8601 format",
+            "example": "2022-04-30T21:00:00.000Z"
           }
         ],
         "responses": {

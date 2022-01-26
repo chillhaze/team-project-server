@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const ERROR_MESSAGES = require('../../validationErrorMessages')
+const { ERROR_MESSAGES } = require('../../../../utils')
 
 const paramsSchema = Joi.object({
   transactionId: Joi.string()

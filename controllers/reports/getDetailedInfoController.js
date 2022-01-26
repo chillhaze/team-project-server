@@ -1,5 +1,3 @@
-const createError = require('http-errors')
-
 const { getDetailedReport } = require('../../services')
 const { getMonthOfYearInterval, createUrl } = require('../../utils')
 

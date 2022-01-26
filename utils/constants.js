@@ -1,3 +1,39 @@
+const TRANSACTION_TYPES = {
+  DEBIT: 'debit',
+  CREDIT: 'credit',
+  ALL: 'all'
+}
+
+const CATEGORY_TYPES = {
+  DEBIT: 'debit',
+  CREDIT: 'credit'
+}
+
+const MODEL_NAMES = {
+  BALANCE: 'balance',
+  TRANSACTIONS: 'transaction'
+}
+
+const REPORTS_CATEGORY_TYPES = {
+  INCOME: 'income',
+  COST: 'cost'
+}
+
+const MONTHS = {
+  0: 'Январь',
+  1: 'Февраль',
+  2: 'Март',
+  3: 'Апрель',
+  4: 'Май',
+  5: 'Июнь',
+  6: 'Июль',
+  7: 'Август',
+  8: 'Сентябрь',
+  9: 'Октябрь',
+  10: 'Ноябрь',
+  11: 'Декабрь'
+}
+
 const ERROR_MESSAGES = {
   missingTypeField: 'missing required type field',
   invalidTypeValue: 'invalid type value',
@@ -28,4 +64,11 @@ const ERROR_MESSAGES = {
   invalidNameValue: 'invalid name value (must be between 2 and 20 characters, starting with letters and consisting of letters, commas and spaces )'
 }
 
-module.exports = ERROR_MESSAGES
+module.exports = {
+  TRANSACTION_TYPES,
+  CATEGORY_TYPES,
+  ERROR_MESSAGES,
+  MODEL_NAMES,
+  REPORTS_CATEGORY_TYPES,
+  MONTHS
+}

@@ -8,8 +8,7 @@ const getSummary = async (req, res) => {
   const { type, period } = req.query
 
   const [minPeriod, maxPeriod] = getSummaryTimeInterval(period)
-  console.log(period.toString())
-  console.log(minPeriod, maxPeriod)
+
   const transactions = await Transaction
     .find({
       owner,

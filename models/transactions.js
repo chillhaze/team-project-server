@@ -1,14 +1,5 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
-
-const MODELS = {
-  BALANCE: 'balance',
-  TRANSACTIONS: 'transaction'
-}
-
-const TRANSACTION_TYPES = {
-  DEBIT: 'debit',
-  CREDIT: 'credit'
-}
+const { MODEL_NAMES, TRANSACTION_TYPES } = require('../utils')
 
 // transaction schema
 const transactionSchema = Schema({
@@ -43,7 +34,7 @@ const transactionSchema = Schema({
 transactionSchema.pre('save', { document: true }, async function (next) {
   const { owner, type, amount } = this
 
-  const balance = await model(MODELS.BALANCE).findOne({ owner })
+  const balance = await model(MODEL_NAMES.BALANCE).findOne({ owner })
 
   if (!balance) {
     throw new Error('Balance not set')
@@ -62,7 +53,7 @@ transactionSchema.pre('save', { document: true }, async function (next) {
 transactionSchema.pre('findOneAndRemove', { document: false, query: true }, async function (next) {
   const transactionId = this.getQuery()._id
 
-  const transaction = await model(MODELS.TRANSACTIONS)
+  const transaction = await model(MODEL_NAMES.TRANSACTIONS)
     .findOne({ _id: transactionId })
 
   if (!transaction) {
@@ -71,7 +62,7 @@ transactionSchema.pre('findOneAndRemove', { document: false, query: true }, asyn
 
   const { owner, type, amount } = transaction
 
-  const balance = await model(MODELS.BALANCE).findOne({ owner })
+  const balance = await model(MODEL_NAMES.BALANCE).findOne({ owner })
 
   if (!balance) {
     throw new Error('Balance not set')
@@ -86,6 +77,6 @@ transactionSchema.pre('findOneAndRemove', { document: false, query: true }, asyn
   next()
 })
 
-const Transaction = model(MODELS.TRANSACTIONS, transactionSchema)
+const Transaction = model(MODEL_NAMES.TRANSACTIONS, transactionSchema)
 
 module.exports = { Transaction }

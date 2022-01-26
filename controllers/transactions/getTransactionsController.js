@@ -1,11 +1,5 @@
 const { Transaction } = require('../../models')
-const { getDaysInterval } = require('../../utils')
-
-const TRANSACTION_TYPES = {
-  DEBIT: 'debit',
-  CREDIT: 'credit',
-  ALL: 'all'
-}
+const { getDaysInterval, TRANSACTION_TYPES } = require('../../utils')
 
 const getTransactionsPerDay = async (req, res) => {
   const { _id: owner } = req.user

@@ -1,6 +1,5 @@
 const { Category } = require('../../models')
-
-const { createUrl, dataNormalizer } = require('../../utils')
+const { createUrl } = require('../../utils')
 
 const getCategories = async (req, res) => {
   const result = await Category

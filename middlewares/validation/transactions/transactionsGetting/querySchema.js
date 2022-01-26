@@ -1,12 +1,6 @@
 const Joi = require('joi')
 
-const ERROR_MESSAGES = require('../../validationErrorMessages')
-
-const TRANSACTION_TYPES = {
-  DEBIT: 'debit',
-  CREDIT: 'credit',
-  ALL: 'all'
-}
+const { TRANSACTION_TYPES, ERROR_MESSAGES } = require('../../../../utils')
 
 const querySchema = Joi.object({
   type: Joi.string()

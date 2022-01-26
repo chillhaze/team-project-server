@@ -1,10 +1,5 @@
 const { Transaction } = require('../models')
-const { groupByUniqueDescriptions, generalIndicatorsCounting } = require('../utils')
-
-const CATEGORY_TYPES = {
-  INCOME: 'income',
-  COST: 'cost'
-}
+const { groupByUniqueDescriptions, generalIndicatorsCounting, REPORTS_CATEGORY_TYPES } = require('../utils')
 
 const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
   // At the numerous requests of workers (c)
@@ -50,7 +45,7 @@ const getDetailedReport = async (owner, minPeriod, maxPeriod) => {
   // updates report by grouping its not unique detailed info
   const updatedReport = report.map(elem => {
     elem.subcategories = groupByUniqueDescriptions(elem.subcategories)
-    elem.type = elem.type === 'credit' ? CATEGORY_TYPES.COST : CATEGORY_TYPES.INCOME
+    elem.type = elem.type === 'credit' ? REPORTS_CATEGORY_TYPES.COST : REPORTS_CATEGORY_TYPES.INCOME
     return elem
   })
 

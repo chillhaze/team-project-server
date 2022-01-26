@@ -7,6 +7,8 @@ const getSummaryTimeInterval = require('./getSummaryTimeInterval')
 const dataNormalizer = require('./dataNormalizer')
 const groupByUniqueDescriptions = require('./groupByUniqueDescriptions')
 const generalIndicatorsCounting = require('./generalIndicatorsCounting')
+const sendEmail = require('./sendEmail')
+const makeEmail = require('.//makeEmail')
 
 module.exports = {
   ...constants,
@@ -17,5 +19,7 @@ module.exports = {
   getSummaryTimeInterval,
   dataNormalizer,
   groupByUniqueDescriptions,
-  generalIndicatorsCounting
+  generalIndicatorsCounting,
+  sendEmail,
+  makeEmail
 }

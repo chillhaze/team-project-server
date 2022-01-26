@@ -15,9 +15,11 @@ const { Conflict } = require('http-errors')
 const { nanoid } = require('nanoid')
 const queryString = require('query-string')
 const axios = require('axios')
-const avatarsDirectory = path.join(__dirname, "../../", "public", "avatars");
-const fs = require('fs/promises');
-var Jimp = require('jimp');
+const avatarsDirectory = path.join(__dirname, "../../", "public", "avatars")
+const fs = require('fs/promises')
+var Jimp = require('jimp')
+const { sendEmail } = require('../../utils/')
+const {makeEmail} = require('../../utils');
 
 class AuthControllers {
   async logout(req, res) {
@@ -65,12 +67,29 @@ class AuthControllers {
     if (user) {
       throw new Conflict('Email already in use')
     }
-    const verifyToken = nanoid()
-    const newUser = new User({ email, verifyToken })
+    //const verifyToken = nanoid()
+    const newUser = new User({ email })
     newUser.setPassword(password)
     newUser.setAvatar(email)
     newUser.setName(name)
+
+    const payload = {
+      id: newUser._id.toString(),
+    }
+
+    const verifyToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '999h' });
+    newUser.setToken(verifyToken);
     await newUser.save()
+
+    const mailMessage = makeEmail(newUser.name.toString(), `${FRONTEND_URL}/verify?verifyToken=${verifyToken}`);
+    const mailToUser = {
+      to: email,
+      subject: "Register confirmation",
+      html: mailMessage
+    };
+
+    await sendEmail(mailToUser);
+
     const { avatarURL: generatedAvatar, name: generatedName } = newUser
 
     res.status(201).json({
@@ -150,7 +169,7 @@ class AuthControllers {
     await User.findByIdAndUpdate(createdUser._id, { token: token })
 
     return res.redirect(
-      `${FRONTEND_URL}?email=${userData.data.email}&token=${token}&avatarURL=${userData.data.picture}&name=${createdUser.name}`,
+      `${FRONTEND_URL}/redirect?email=${userData.data.email}&token=${token}&avatarURL=${userData.data.picture}&name=${createdUser.name}`,
     )
   }
 
@@ -195,8 +214,8 @@ class AuthControllers {
     if (!user) {
       throw new Unauthorized("Cant update name of not authentificated user");
     }
-    await User.findByIdAndUpdate(id, {name});
-    const {avatarURL, email, token} = user;
+    await User.findByIdAndUpdate(id, { name });
+    const { avatarURL, email, token } = user;
     res.status(201).json({
       status: "success",
       code: 201,
@@ -208,6 +227,18 @@ class AuthControllers {
           token
         }
       }
+    });
+  }
+
+  async verification(req, res) {
+    const { verifyToken } = req.params;
+    const user = await User.findOne({ verifyToken });
+    if (!user) {
+      throw new NotFound("User not found");
+    }
+    await User.findByIdAndUpdate(user._id, { verifyToken: null, verify: true });
+    res.status(200).json({
+      message: "Verification successful"
     });
   }
 

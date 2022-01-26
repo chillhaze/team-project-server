@@ -1,21 +1,22 @@
 const createError = require('http-errors')
 
 const { Transaction } = require('../../models')
-const { getYearsInterval, makeSummary } = require('../../utils')
+const { getSummaryTimeInterval, makeSummary } = require('../../utils')
 
 const getSummary = async (req, res) => {
   const { _id: owner } = req.user
   const { type, period } = req.query
 
-  const [minPeriod, maxPeriod] = getYearsInterval(period)
-
+  const [minPeriod, maxPeriod] = getSummaryTimeInterval(period)
+  console.log(period.toString())
+  console.log(minPeriod, maxPeriod)
   const transactions = await Transaction
     .find({
       owner,
       type,
       completedAt: {
-        $gte: minPeriod,
-        $lt: maxPeriod
+        $gte: new Date(minPeriod),
+        $lt: new Date(maxPeriod)
       }
     })
     .select({ owner: 0, type: 0, createdAt: 0, updatedAt: 0 })

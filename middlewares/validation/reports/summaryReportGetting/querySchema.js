@@ -16,17 +16,25 @@ const querySchema = Joi.object({
       'any.required': ERROR_MESSAGES.missingTypeQueryString,
       'any.only': ERROR_MESSAGES.invalidTypeQueryStringFormat
     }),
-  period: Joi.number()
+  period: Joi.date()
     .required()
-    .integer()
-    .min(1900)
-    .max(9999)
+    .iso()
     .messages({
-      'any.required': ERROR_MESSAGES.missingPeriodQueryString,
-      'number.base': ERROR_MESSAGES.invalidPeriodQueryStringFormat,
-      'number.min': ERROR_MESSAGES.outOfRangePeriodQueryString,
-      'number.max': ERROR_MESSAGES.outOfRangePeriodQueryString
+      'any.required': ERROR_MESSAGES.missingDateField,
+      'date.format': ERROR_MESSAGES.invalidDateFormat
     })
+
+  // Joi.number()
+  // .required()
+  // .integer()
+  // .min(1900)
+  // .max(9999)
+  // .messages({
+  //   'any.required': ERROR_MESSAGES.missingPeriodQueryString,
+  //   'number.base': ERROR_MESSAGES.invalidPeriodQueryStringFormat,
+  //   'number.min': ERROR_MESSAGES.outOfRangePeriodQueryString,
+  //   'number.max': ERROR_MESSAGES.outOfRangePeriodQueryString
+  // })
 })
 
 module.exports = querySchema
